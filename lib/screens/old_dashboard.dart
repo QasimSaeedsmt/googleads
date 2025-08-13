@@ -32,7 +32,7 @@ class _OldDashboardScreenState extends State<OldDashboardScreen> {
     final provider = Provider.of<CampaignProvider>(context);
 
     return Scaffold(
-      backgroundColor: Color(0xFF121212),
+      backgroundColor: Colors.white,
       appBar: GoogleAdsAppBar(isLoading: _isRefreshing, onRefresh: _handleRefresh),
       body: provider.seriesData.isEmpty
           ? Center(
@@ -45,53 +45,86 @@ class _OldDashboardScreenState extends State<OldDashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Metric Cards with subtle animation on refresh
-            AnimatedSwitcher(
-              duration: Duration(milliseconds: 800),
-              child: Row(
-                key: ValueKey(provider.seriesData),
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MetricCard(
-                      label: 'Clicks',
-                      value: _getTotal(provider.seriesData, 'Clicks')
-                          .toInt()
-                          .toString(),
-                      color: Colors.blueAccent),
-                  MetricCard(
-                      label: 'Impressions',
-                      value: _getTotal(provider.seriesData, 'Impressions')
-                          .toInt()
-                          .toString(),
-                      color: Colors.greenAccent),
-                  MetricCard(
-                      label: 'Conversions',
-                      value: _getTotal(provider.seriesData, 'Conversions')
-                          .toInt()
-                          .toString(),
-                      color: Colors.orangeAccent),
-                  MetricCard(
-                      label: 'Cost',
-                      value:
-                      '\$${_getTotal(provider.seriesData, 'Cost').toStringAsFixed(2)}',
-                      color: Colors.redAccent),
-                ],
+            SizedBox(
+              height: 155,  // fixed height enough to hold MetricCards
+
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 800),
+                child: Row(
+                  key: ValueKey(provider.seriesData),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: MetricCard(
+                        changePercentage: "+17",
+                        isBackgroundWhite:false,
+                        backgroundColor: Color(0xFF3672e8)
+                       , selectedMetric: 'Clicks',
+                        value: _formatNumber(_getTotal(provider.seriesData, 'Clicks').toDouble()),
+                        color: Colors.white70,
+                        dropdownItems: ['Clicks', 'Impressions', 'Conversions', 'Cost'],
+                        onMetricChanged: (newMetric) {
+                          // Update selection
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: MetricCard(
+                        changePercentage: "+99",
+                        isBackgroundWhite: false,
+                        backgroundColor: Color(0xffda2f23),
+                        selectedMetric: 'Impressions',
+                        value: _formatNumber(_getTotal(provider.seriesData, 'Impressions').toDouble()),
+                        color: Colors.white70,
+                        dropdownItems: ['Clicks', 'Impressions', 'Conversions', 'Cost'],
+                        onMetricChanged: (newMetric) {},
+                      ),
+                    ),
+                    Expanded(
+                      child: MetricCard(
+                        isBackgroundWhite: true,
+                        changePercentage: "-8",
+
+                        backgroundColor: Color(0xfff7ac00),
+                        selectedMetric: 'Conversions',
+                        value: _formatNumber(_getTotal(provider.seriesData, 'Conversions').toDouble()),
+                        color: Colors.black,
+                        dropdownItems: ['Clicks', 'Impressions', 'Conversions', 'Cost'],
+                        onMetricChanged: (newMetric) {},
+                      ),
+                    ),
+                    Expanded(
+                      child: MetricCard(
+                        changePercentage: "+81",
+                        isBackgroundWhite: true,
+                        backgroundColor: Color(0xff1e8e40),
+                        selectedMetric: 'Cost',
+                        value: "\$ ${_formatNumber(_getTotal(provider.seriesData, 'Cost').toDouble())}",
+                        color: Colors.black,
+                        dropdownItems: ['Clicks', 'Impressions', 'Conversions', 'Cost'],
+                        onMetricChanged: (newMetric) {},
+                      ),
+                    ),
+                    SizedBox(width: MediaQuery.of(context).size.width*0.20,)
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 20),
             Expanded(
               child: SfCartesianChart(
-                backgroundColor: Color(0xFF121212),
+                backgroundColor: Colors.white70,
                 primaryXAxis: CategoryAxis(
-                  labelStyle: TextStyle(color: Colors.white70),
+                  labelStyle: TextStyle(color: Color(0xFF121212)),
                   majorGridLines: MajorGridLines(width: 0),
                 ),
                 primaryYAxis: NumericAxis(
-                  labelStyle: TextStyle(color: Colors.white70),
-                  majorGridLines: MajorGridLines(color: Colors.grey[800]!),
+                  labelStyle: TextStyle(color: Color(0xFF121212)),
+                  majorGridLines: MajorGridLines(color: Colors.grey[900]!),
                 ),
                 legend: Legend(
                     isVisible: true,
-                    textStyle: TextStyle(color: Colors.white70)),
+                    textStyle: TextStyle(color: Color(0xFF121212))),
                 tooltipBehavior: TooltipBehavior(enable: true),
                 series: <LineSeries<ChartSeriesEntry, String>>[
                   LineSeries<ChartSeriesEntry, String>(
@@ -133,6 +166,19 @@ class _OldDashboardScreenState extends State<OldDashboardScreen> {
         ),
       )
     );
+  }
+  String _formatNumber(double value) {
+    if (value >= 1000) {
+      double divided = value / 1000;
+      String formatted = divided.toStringAsFixed(3); // e.g., 1.234
+
+      // Remove trailing zeros (e.g., 1.500 → 1.5, 11.000 → 11)
+      formatted = formatted.replaceAll(RegExp(r'([.]*0+)(?!.*\d)'), '');
+
+      return formatted + 'K';
+    } else {
+      return value.toInt().toString();
+    }
   }
 
   double _getTotal(List<ChartSeriesEntry> data, String label) {

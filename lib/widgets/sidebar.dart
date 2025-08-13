@@ -107,7 +107,7 @@ class _SidebarState extends State<Sidebar> {
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
       width: _isCollapsed ? 70 : 280,
-      color: Color(0xFF202124),
+      color: Colors.white,
       padding: EdgeInsets.only(top: 40, bottom: 16),
       child: Column(
         children: [
@@ -120,7 +120,7 @@ class _SidebarState extends State<Sidebar> {
                   child: Text(
                     'Google Ads',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Color(0xFF202124),
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1.2,
@@ -131,7 +131,7 @@ class _SidebarState extends State<Sidebar> {
               IconButton(
                 icon: Icon(
                   _isCollapsed ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
-                  color: Colors.white70,
+                  color: Color(0xFF202124),
                   size: 18,
                 ),
                 onPressed: () {
@@ -155,14 +155,14 @@ class _SidebarState extends State<Sidebar> {
                         MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: ListTile(
-                            leading: Icon(category.icon, color: Colors.white70),
+                            leading: Icon(category.icon, color: Color(0xFF202124)),
                             title:
                                 _isCollapsed
                                     ? null
                                     : Text(
                                       category.label,
                                       style: TextStyle(
-                                        color: Colors.white70,
+                                        color: Color(0xFF202124),
                                         fontWeight:
                                             isExpanded
                                                 ? FontWeight.bold
@@ -175,7 +175,7 @@ class _SidebarState extends State<Sidebar> {
                                       isExpanded
                                           ? Icons.expand_less
                                           : Icons.expand_more,
-                                      color: Colors.white70,
+                                      color: Color(0xFF202124),
                                     )
                                     : null,
                             onTap: () {
@@ -206,7 +206,7 @@ class _SidebarState extends State<Sidebar> {
                               child: ListTile(
                                 title: Text(
                                   sub.label,
-                                  style: TextStyle(color: Colors.white60),
+                                  style: TextStyle(color: Color(0xFF202124)),
                                 ),
                                 onTap: sub.onTap,
                                 dense: true,
