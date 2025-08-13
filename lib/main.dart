@@ -8,24 +8,26 @@ import 'screens/dashboard_screen.dart';
 
 void main() {
   runApp(
-    MultiProvider(providers: [
-      ChangeNotifierProvider(
-        create: (_) {
-          final provider = CampaignProvider();
-          provider.loadDummyData();
-          return provider;
-        },
-      ),
-ChangeNotifierProvider(create: (context) => DashboardProvider(),)
-    ],        child: MyApp(),
-    )
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) {
+            final provider = CampaignProvider();
+            provider.loadDummyData();
+            return provider;
+          },
+        ),
+        ChangeNotifierProvider(create: (context) => DashboardProvider()),
+      ],
+      child: MyApp(),
+    ),
   );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
-    title: 'Google Ads Dashboard (Dummy)',
+    title: 'Google Ads Dashboard',
     theme: ThemeData.dark(),
     home: NavigatorScreen(),
     debugShowCheckedModeBanner: false,
